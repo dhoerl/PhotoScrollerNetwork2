@@ -18,7 +18,7 @@ struct ContentView: View {
 //                .navigationBarTitle(
 //                    Text("Image Management").font(.largeTitle)
 //                )
-            DetailView(kvp: ("", URL(fileURLWithPath: "/") ))
+            DetailView(kvp: ("", ""))
         }
         .modifier( WTF() )
     }
@@ -63,7 +63,7 @@ struct MV: View {
                         .navigationViewStyle(DoubleColumnNavigationViewStyle())
                 } else {
                     content
-                        .navigationViewStyle(StackNavigationViewStyle())
+                        .navigationViewStyle(DoubleColumnNavigationViewStyle()) // StackNavigationViewStyle
                 }
             }
         }

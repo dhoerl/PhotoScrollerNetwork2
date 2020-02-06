@@ -11,7 +11,7 @@ import SwiftUI
 
 struct DetailView: View {
     @EnvironmentObject var appEnvironment: AppEnvironment
-    var kvp: (key: String, value: URL)
+    var kvp: (key: String, value: String)
 
     
 //    @Binding var dates: [Date]

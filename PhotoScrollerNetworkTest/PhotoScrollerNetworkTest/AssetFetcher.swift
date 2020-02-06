@@ -27,7 +27,7 @@ private func LOG(_ items: Any..., separator: String = " ", terminator: String = 
 
 final class AssetFetcher: Publisher {
     static var assetQueue = DispatchQueue.main
-    static var _assetQueue: DispatchQueue { DispatchQueue(label: "com.AssetFetcher", qos: .userInitiated) }
+    static private var _assetQueue: DispatchQueue { DispatchQueue(label: "com.AssetFetcher", qos: .userInitiated) }
 
     typealias Output = Data
     typealias Failure = Error

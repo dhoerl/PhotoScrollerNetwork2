@@ -165,6 +165,7 @@ extension WebFetcherStream {
     }
 
     override func open() {
+        dispatchPrecondition(condition: .onQueue(Self.queue))
         guard _streamStatus == .notOpen else { fatalError() }
 
         Self.queue.async {
@@ -186,6 +187,7 @@ extension WebFetcherStream {
     }
 
     override func close() {
+        dispatchPrecondition(condition: .onQueue(Self.queue))
         guard _streamStatus != .closed else { return }
         _streamStatus = .closed
         delegate = nil
@@ -194,10 +196,12 @@ extension WebFetcherStream {
     }
 
     override var streamStatus: Stream.Status {
+        dispatchPrecondition(condition: .onQueue(Self.queue))
         return _streamStatus
     }
 
     override var streamError: Error? {
+        dispatchPrecondition(condition: .onQueue(Self.queue))
         return _streamError
     }
 
@@ -234,6 +238,7 @@ extension WebFetcherStream {
     }
 
     override func getBuffer(_ buffer: UnsafeMutablePointer<UnsafeMutablePointer<UInt8>?>, length len: UnsafeMutablePointer<Int>) -> Bool {
+        dispatchPrecondition(condition: .onQueue(Self.queue))
         len[0] = data.count
 
         data.withUnsafeMutableBytes({ (bufPtr: UnsafeMutableRawBufferPointer) -> Void in
@@ -246,6 +251,7 @@ extension WebFetcherStream {
     }
 
     override var hasBytesAvailable: Bool {
+        dispatchPrecondition(condition: .onQueue(Self.queue))
         return _hasBytesAvailable
     }
 

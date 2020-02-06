@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE00E33B23EA12AB004AD8F0 /* ImageBuilding.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE00E33A23EA12AB004AD8F0 /* ImageBuilding.swift */; };
 		DE30888923E8CD4C0051AAC8 /* PhotoScrollerSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = DE30888823E8CD4C0051AAC8 /* PhotoScrollerSwiftPackage */; };
+		DE790D7623ECB0FB00D20221 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE790D7523ECB0FB00D20221 /* ImageProvider.swift */; };
 		DEADC62623DCE16100BC8F70 /* AssetFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEADC62523DCE16100BC8F70 /* AssetFetcher.swift */; };
 		DEADC62823DDE66300BC8F70 /* FileFetcherStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEADC62723DDE66300BC8F70 /* FileFetcherStream.swift */; };
 		DEADC63323DDF30800BC8F70 /* err_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEADC62A23DDF30800BC8F70 /* err_image.jpg */; };
@@ -43,7 +45,6 @@
 		DEC3164723D7A607008E17E7 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3164623D7A607008E17E7 /* Environment.swift */; };
 		DEC3164C23D7A6B9008E17E7 /* MasterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3164B23D7A6B9008E17E7 /* MasterView.swift */; };
 		DEC3164E23D7A6CA008E17E7 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC3164D23D7A6CA008E17E7 /* DetailView.swift */; };
-		DEE8397123E8789600ECB68E /* PhotoScrollerSwiftPackage in Frameworks */ = {isa = PBXBuildFile; platformFilter = ios; productRef = DEE8397023E8789600ECB68E /* PhotoScrollerSwiftPackage */; };
 		DEE8397F23E8C68600ECB68E /* libturbojpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE8397E23E8C68600ECB68E /* libturbojpeg.a */; };
 /* End PBXBuildFile section */
 
@@ -58,33 +59,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DE30888B23E8CDEB0051AAC8 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		DE30888F23E8CDEB0051AAC8 /* TilingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TilingView.h; sourceTree = "<group>"; };
-		DE30889023E8CDEB0051AAC8 /* ImageScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageScrollView.h; sourceTree = "<group>"; };
-		DE30889123E8CDEB0051AAC8 /* TilingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TilingView.m; sourceTree = "<group>"; };
-		DE30889223E8CDEB0051AAC8 /* ImageScrollView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageScrollView.m; sourceTree = "<group>"; };
-		DE30889523E8CDEB0051AAC8 /* TilingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TilingView.h; sourceTree = "<group>"; };
-		DE30889623E8CDEB0051AAC8 /* ImageScrollView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageScrollView.h; sourceTree = "<group>"; };
-		DE30889723E8CDEB0051AAC8 /* PhotoScrollerSwiftPackage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoScrollerSwiftPackage.h; sourceTree = "<group>"; };
-		DE30889923E8CDEB0051AAC8 /* TiledImageBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TiledImageBuilder.h; sourceTree = "<group>"; };
-		DE30889A23E8CDEB0051AAC8 /* TiledImageBuilder-Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TiledImageBuilder-Private.h"; sourceTree = "<group>"; };
-		DE30889C23E8CDEB0051AAC8 /* jpeglib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jpeglib.h; sourceTree = "<group>"; };
-		DE30889D23E8CDEB0051AAC8 /* jerror.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jerror.h; sourceTree = "<group>"; };
-		DE30889E23E8CDEB0051AAC8 /* turbojpeg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = turbojpeg.h; sourceTree = "<group>"; };
-		DE30889F23E8CDEB0051AAC8 /* jconfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jconfig.h; sourceTree = "<group>"; };
-		DE3088A023E8CDEB0051AAC8 /* jmorecfg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jmorecfg.h; sourceTree = "<group>"; };
-		DE3088A123E8CDEB0051AAC8 /* PhotoScrollerCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoScrollerCommon.h; sourceTree = "<group>"; };
-		DE3088A323E8CDEB0051AAC8 /* TiledImageBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TiledImageBuilder.h; sourceTree = "<group>"; };
-		DE3088A423E8CDEB0051AAC8 /* TiledImageBuilder+Draw.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TiledImageBuilder+Draw.h"; sourceTree = "<group>"; };
-		DE3088A523E8CDEB0051AAC8 /* TiledImageBuilder+Tile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "TiledImageBuilder+Tile.m"; sourceTree = "<group>"; };
-		DE3088A623E8CDEB0051AAC8 /* TiledImageBuilder+JPEG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TiledImageBuilder+JPEG.h"; sourceTree = "<group>"; };
-		DE3088A723E8CDEB0051AAC8 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		DE3088A823E8CDEB0051AAC8 /* TiledImageBuilder+Draw.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "TiledImageBuilder+Draw.m"; sourceTree = "<group>"; };
-		DE3088A923E8CDEB0051AAC8 /* TiledImageBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TiledImageBuilder.m; sourceTree = "<group>"; };
-		DE3088AA23E8CDEB0051AAC8 /* TiledImageBuilder+Tile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TiledImageBuilder+Tile.h"; sourceTree = "<group>"; };
-		DE3088AB23E8CDEB0051AAC8 /* TiledImageBuilder+JPEG.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "TiledImageBuilder+JPEG.m"; sourceTree = "<group>"; };
-		DE3088AC23E8CDEB0051AAC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		DE3088AD23E8CDEB0051AAC8 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		DE00E33923E9EC58004AD8F0 /* PhotoScrollerSwiftPackage */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PhotoScrollerSwiftPackage; path = ../../PhotoScrollerSwiftPackage; sourceTree = "<group>"; };
+		DE00E33A23EA12AB004AD8F0 /* ImageBuilding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBuilding.swift; sourceTree = "<group>"; };
+		DE790D7523ECB0FB00D20221 /* ImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
 		DEADC62523DCE16100BC8F70 /* AssetFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetFetcher.swift; sourceTree = "<group>"; };
 		DEADC62723DDE66300BC8F70 /* FileFetcherStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileFetcherStream.swift; sourceTree = "<group>"; };
 		DEADC62A23DDF30800BC8F70 /* err_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = err_image.jpg; path = Images/err_image.jpg; sourceTree = SOURCE_ROOT; };
@@ -112,6 +89,7 @@
 		DEC3164623D7A607008E17E7 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		DEC3164B23D7A6B9008E17E7 /* MasterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterView.swift; sourceTree = "<group>"; };
 		DEC3164D23D7A6CA008E17E7 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		DEE04E5223E9D1B700BF53B7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 		DEE8397E23E8C68600ECB68E /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libturbojpeg.a; path = "../../../Users/dhoerl/Library/Developer/Xcode/DerivedData/PhotoScrollerNetworkTest-ffdclravncxkjtewqclkyteuxzok/SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries/libturbojpeg.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,7 +98,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEE8397123E8789600ECB68E /* PhotoScrollerSwiftPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,111 +113,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DE30888A23E8CDB60051AAC8 /* PackageSourcesForEditing */ = {
-			isa = PBXGroup;
-			children = (
-				DE30888B23E8CDEB0051AAC8 /* LICENSE */,
-				DE3088AD23E8CDEB0051AAC8 /* Package.swift */,
-				DE3088AC23E8CDEB0051AAC8 /* README.md */,
-				DE30888C23E8CDEB0051AAC8 /* Sources */,
-			);
-			name = PackageSourcesForEditing;
-			sourceTree = "<group>";
-		};
-		DE30888C23E8CDEB0051AAC8 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				DE30888D23E8CDEB0051AAC8 /* PhotoScrollerSwiftPackage */,
-			);
-			name = Sources;
-			path = ../Sources;
-			sourceTree = "<group>";
-		};
-		DE30888D23E8CDEB0051AAC8 /* PhotoScrollerSwiftPackage */ = {
-			isa = PBXGroup;
-			children = (
-				DE30888E23E8CDEB0051AAC8 /* UI */,
-				DE30889323E8CDEB0051AAC8 /* include */,
-				DE3088A223E8CDEB0051AAC8 /* ImageDecoding */,
-			);
-			path = PhotoScrollerSwiftPackage;
-			sourceTree = "<group>";
-		};
-		DE30888E23E8CDEB0051AAC8 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				DE30888F23E8CDEB0051AAC8 /* TilingView.h */,
-				DE30889023E8CDEB0051AAC8 /* ImageScrollView.h */,
-				DE30889123E8CDEB0051AAC8 /* TilingView.m */,
-				DE30889223E8CDEB0051AAC8 /* ImageScrollView.m */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
-		DE30889323E8CDEB0051AAC8 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				DE30889423E8CDEB0051AAC8 /* UI */,
-				DE30889723E8CDEB0051AAC8 /* PhotoScrollerSwiftPackage.h */,
-				DE30889823E8CDEB0051AAC8 /* ImageDecoding */,
-				DE30889B23E8CDEB0051AAC8 /* libturbojpeg */,
-				DE3088A123E8CDEB0051AAC8 /* PhotoScrollerCommon.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		DE30889423E8CDEB0051AAC8 /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				DE30889523E8CDEB0051AAC8 /* TilingView.h */,
-				DE30889623E8CDEB0051AAC8 /* ImageScrollView.h */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
-		DE30889823E8CDEB0051AAC8 /* ImageDecoding */ = {
-			isa = PBXGroup;
-			children = (
-				DE30889923E8CDEB0051AAC8 /* TiledImageBuilder.h */,
-				DE30889A23E8CDEB0051AAC8 /* TiledImageBuilder-Private.h */,
-			);
-			path = ImageDecoding;
-			sourceTree = "<group>";
-		};
-		DE30889B23E8CDEB0051AAC8 /* libturbojpeg */ = {
-			isa = PBXGroup;
-			children = (
-				DE30889C23E8CDEB0051AAC8 /* jpeglib.h */,
-				DE30889D23E8CDEB0051AAC8 /* jerror.h */,
-				DE30889E23E8CDEB0051AAC8 /* turbojpeg.h */,
-				DE30889F23E8CDEB0051AAC8 /* jconfig.h */,
-				DE3088A023E8CDEB0051AAC8 /* jmorecfg.h */,
-			);
-			path = libturbojpeg;
-			sourceTree = "<group>";
-		};
-		DE3088A223E8CDEB0051AAC8 /* ImageDecoding */ = {
-			isa = PBXGroup;
-			children = (
-				DE3088A723E8CDEB0051AAC8 /* README */,
-				DE3088A323E8CDEB0051AAC8 /* TiledImageBuilder.h */,
-				DE3088A423E8CDEB0051AAC8 /* TiledImageBuilder+Draw.h */,
-				DE3088A523E8CDEB0051AAC8 /* TiledImageBuilder+Tile.m */,
-				DE3088A623E8CDEB0051AAC8 /* TiledImageBuilder+JPEG.h */,
-				DE3088A823E8CDEB0051AAC8 /* TiledImageBuilder+Draw.m */,
-				DE3088A923E8CDEB0051AAC8 /* TiledImageBuilder.m */,
-				DE3088AA23E8CDEB0051AAC8 /* TiledImageBuilder+Tile.h */,
-				DE3088AB23E8CDEB0051AAC8 /* TiledImageBuilder+JPEG.m */,
-			);
-			path = ImageDecoding;
-			sourceTree = "<group>";
-		};
 		DEADC62423DCE12400BC8F70 /* Data */ = {
 			isa = PBXGroup;
 			children = (
 				DEADC62523DCE16100BC8F70 /* AssetFetcher.swift */,
 				DEADC62723DDE66300BC8F70 /* FileFetcherStream.swift */,
 				DEADC63C23DF905300BC8F70 /* WebFetcherStream.swift */,
+				DE790D7523ECB0FB00D20221 /* ImageProvider.swift */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -268,6 +147,7 @@
 				DEADC67423E47C2700BC8F70 /* Info.plist */,
 				DEADC67223E47C2700BC8F70 /* FileBased.swift */,
 				DEADC68B23E722F300BC8F70 /* WebBased.swift */,
+				DE00E33A23EA12AB004AD8F0 /* ImageBuilding.swift */,
 			);
 			path = PhotoScrollerNetworkTestTests;
 			sourceTree = "<group>";
@@ -275,7 +155,7 @@
 		DEC3162623D7A562008E17E7 = {
 			isa = PBXGroup;
 			children = (
-				DE30888A23E8CDB60051AAC8 /* PackageSourcesForEditing */,
+				DE00E33923E9EC58004AD8F0 /* PhotoScrollerSwiftPackage */,
 				DEC3163123D7A562008E17E7 /* PhotoScrollerNetworkTest */,
 				DEADC67123E47C2700BC8F70 /* PhotoScrollerNetworkTestTests */,
 				DEC3163023D7A562008E17E7 /* Products */,
@@ -295,13 +175,14 @@
 		DEC3163123D7A562008E17E7 /* PhotoScrollerNetworkTest */ = {
 			isa = PBXGroup;
 			children = (
-				DEADC62923DDF27A00BC8F70 /* Images */,
+				DEE04E5223E9D1B700BF53B7 /* README.md */,
+				DEC3164623D7A607008E17E7 /* Environment.swift */,
+				DEC3163423D7A562008E17E7 /* SceneDelegate.swift */,
 				DEADC62423DCE12400BC8F70 /* Data */,
 				DEC3164823D7A61E008E17E7 /* Master */,
 				DEC3164923D7A62A008E17E7 /* Detail */,
-				DEC3163423D7A562008E17E7 /* SceneDelegate.swift */,
 				DEC3164A23D7A66C008E17E7 /* TopLevel */,
-				DEC3164623D7A607008E17E7 /* Environment.swift */,
+				DEADC62923DDF27A00BC8F70 /* Images */,
 				DEC3163A23D7A564008E17E7 /* Preview Content */,
 				DEC3164023D7A564008E17E7 /* Info.plist */,
 			);
@@ -370,7 +251,6 @@
 			);
 			name = PhotoScrollerNetworkTestTests;
 			packageProductDependencies = (
-				DEE8397023E8789600ECB68E /* PhotoScrollerSwiftPackage */,
 			);
 			productName = PhotoScrollerNetworkTestTests;
 			productReference = DEADC67023E47C2700BC8F70 /* PhotoScrollerNetworkTestTests.xctest */;
@@ -381,9 +261,9 @@
 			buildConfigurationList = DEC3164323D7A564008E17E7 /* Build configuration list for PBXNativeTarget "PhotoScrollerNetworkTest" */;
 			buildPhases = (
 				DEC3162B23D7A562008E17E7 /* Sources */,
+				DEE8397A23E8C36100ECB68E /* ShellScript */,
 				DEC3162C23D7A562008E17E7 /* Frameworks */,
 				DEC3162D23D7A562008E17E7 /* Resources */,
-				DEE8397A23E8C36100ECB68E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -492,7 +372,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"Howdie\"\necho \"$BUILD_DIR/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries\"\nls \"$BUILD_DIR/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# echo \"Howdie\"\n# echo \"$BUILD_DIR/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries\"\n# ls \"$BUILD_DIR/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries\"\n\nexit 0\n\nif [ ! -d \"$(BUILD_DIR)/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries\" ]\nthen\n    mkdir -p \"$(BUILD_DIR)/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries\"\nfi\nexit 0\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -504,6 +384,7 @@
 				DEADC68723E47EBA00BC8F70 /* AssetFetcher.swift in Sources */,
 				DEADC67323E47C2700BC8F70 /* FileBased.swift in Sources */,
 				DEADC68C23E722F300BC8F70 /* WebBased.swift in Sources */,
+				DE00E33B23EA12AB004AD8F0 /* ImageBuilding.swift in Sources */,
 				DEADC68923E47EBA00BC8F70 /* WebFetcherStream.swift in Sources */,
 				DEADC68823E47EBA00BC8F70 /* FileFetcherStream.swift in Sources */,
 			);
@@ -513,6 +394,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE790D7623ECB0FB00D20221 /* ImageProvider.swift in Sources */,
 				DEC3164E23D7A6CA008E17E7 /* DetailView.swift in Sources */,
 				DEC3163323D7A562008E17E7 /* AppDelegate.swift in Sources */,
 				DEC3164723D7A607008E17E7 /* Environment.swift in Sources */,
@@ -710,13 +592,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoScrollerNetworkTest/Preview Content\"";
 				DEVELOPMENT_TEAM = 748Z47NBAH;
+				ENABLE_BITCODE = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PhotoScrollerNetworkTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries";
+				LIBRARY_SEARCH_PATHS = /Volumes/Data/git/PhotoScrollerSwiftPackage/Libraries;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dhoerl.PhotoScrollerNetworkTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -731,13 +614,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoScrollerNetworkTest/Preview Content\"";
 				DEVELOPMENT_TEAM = 748Z47NBAH;
+				ENABLE_BITCODE = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PhotoScrollerNetworkTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries";
+				LIBRARY_SEARCH_PATHS = /Volumes/Data/git/PhotoScrollerSwiftPackage/Libraries;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dhoerl.PhotoScrollerNetworkTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -792,10 +676,6 @@
 		DE30888823E8CD4C0051AAC8 /* PhotoScrollerSwiftPackage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DE30888723E8CD4C0051AAC8 /* XCRemoteSwiftPackageReference "PhotoScrollerSwiftPackage" */;
-			productName = PhotoScrollerSwiftPackage;
-		};
-		DEE8397023E8789600ECB68E /* PhotoScrollerSwiftPackage */ = {
-			isa = XCSwiftPackageProductDependency;
 			productName = PhotoScrollerSwiftPackage;
 		};
 /* End XCSwiftPackageProductDependency section */

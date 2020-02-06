@@ -26,19 +26,24 @@ private let dateFormatter: DateFormatter = {
 //    var name: String { return id }
 //}
 
-typealias Resource = KeyValuePairs<String, URL>
-typealias ResourcePair = (key: String, url: URL)
+typealias Resource = KeyValuePairs<String, String>
+typealias ResourcePair = (key: String, url: String)
 
-private let localFiles: KeyValuePairs<String, URL> = [
-    "File A": URL(string: "https://www.apple.com/")!,
-    "File B": URL(string: "https://www.apple.com/")!,
-    "File C": URL(string: "https://www.apple.com/")!,
+private let localFiles: KeyValuePairs<String, String> = [
+    "Coffee": "Coffee",
+    "Lake": "Lake",
+    "large_leaves_70mp": "large_leaves_70mp",
+    "Shed": "Shed",
+    "Tree": "Tree",
+    "Space4": "Space4",
+    "Space5": "Space5",
+    "Space6": "Space6",
 ]
 
-private let remoteFiles: KeyValuePairs<String, URL> = [
-    "File A": URL(string: "https://www.apple.com/")!,
-    "File B": URL(string: "https://www.apple.com/")!,
-    "File C": URL(string: "https://www.apple.com/")!,
+private let remoteFiles: KeyValuePairs<String, String> = [
+    "File A": "xxx",
+    "File B": "xxx",
+    "File C": "xxx",
 ]
 
 struct MasterView: View {
@@ -79,6 +84,15 @@ struct MasterViewInternal: View {
 
     var body: some View {
         List {
+            Section(header: Text("File Based").font(.largeTitle)) { // font works!!!
+                ForEach(localFiles, id: \.key) { pair in
+                    NavigationLink(
+                        destination: DetailView(kvp: pair)
+                    ) {
+                        Text("\(pair.key)")
+                    }
+                }
+            }
             Section(header: Text("Internet Based").font(.largeTitle)) { // font works!!!
                 ForEach(remoteFiles, id: \.key) { pair in
                     NavigationLink(
