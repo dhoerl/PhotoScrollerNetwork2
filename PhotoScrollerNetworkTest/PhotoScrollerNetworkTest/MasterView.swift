@@ -87,21 +87,21 @@ struct MasterViewInternal: View {
             Section(header: Text("File Based").font(.largeTitle)) { // font works!!!
                 ForEach(localFiles, id: \.key) { pair in
                     NavigationLink(
-                        destination: DetailView(kvp: pair)
+                        destination: DetailView(kvp: (pair.key, ImageProvider.fileURL(name: pair.value)))
                     ) {
                         Text("\(pair.key)")
                     }
                 }
             }
-            Section(header: Text("Internet Based").font(.largeTitle)) { // font works!!!
-                ForEach(remoteFiles, id: \.key) { pair in
-                    NavigationLink(
-                        destination: DetailView(kvp: pair)
-                    ) {
-                        Text("\(pair.key)")
-                    }
-                }
-            }
+//            Section(header: Text("Internet Based").font(.largeTitle)) { // font works!!!
+//                ForEach(remoteFiles, id: \.key) { pair in
+//                    NavigationLink(
+//                        destination: DetailView(kvp: pair)
+//                    ) {
+//                        Text("\(pair.key)")
+//                    }
+//                }
+//            }
         }.listStyle(GroupedListStyle())
 
 

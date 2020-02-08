@@ -7,13 +7,24 @@
 //
 
 import SwiftUI
+import Combine
+import PhotoScrollerSwiftPackage
 
 
 struct DetailView: View {
     @EnvironmentObject var appEnvironment: AppEnvironment
-    var kvp: (key: String, value: String)
+    @ObservedObject var imageProvider: ImageProvider
 
-    
+    let kvp: (key: String, url: URL)
+    var subscriber: AnyCancellable?
+
+    init(kvp: (key: String, url: URL)) {
+        self.kvp = kvp
+
+print("CALLED FOR IMAGE:", kvp.key, "URL", kvp.url.path)
+        imageProvider = ImageProvider(kvp: kvp)
+    }
+
 //    @Binding var dates: [Date]
 
 //    init(_ dates: Binding<[Date]>) {
@@ -37,8 +48,11 @@ struct DetailView: View {
 //                    }
 //                }
             } else {
+
                 Text("Detail view content goes here")
             }
+            ImageView(imageResult: $imageProvider.imageResult)
+                .onAppear { self.imageProvider.fetch() }
         }
 //}
             .navigationBarTitle(Text("Detail"), displayMode: .inline)
@@ -53,7 +67,42 @@ struct DetailView: View {
                 }
             )
     }
+
 }
+
+struct ImageView: View {
+    @Binding var imageResult: ImageResult
+
+    var body: some View {
+        Group {
+            if imageResult.isSuccess() {
+                TiledImageView(view: imageResult.tilingView())
+                    .frame(width: 320, height: 320, alignment: .center)
+            } else {
+                Text("\(imageResult.name) failed \(imageResult.errorMsg())")
+            }
+        }
+    }
+}
+
+struct TiledImageView: UIViewRepresentable {
+    let view: TilingView
+
+//    init(imageBuilder: TiledImageBuilder) {
+//        self.imageBuilder = imageBuilder
+//    }
+
+    func makeUIView(context: Context) -> ImageScrollView {
+        let retView = ImageScrollView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
+        retView.display(view)
+        return retView
+    }
+
+    func updateUIView(_ uiView: ImageScrollView, context: Context) {
+        print("TiledImageView: updateUIView")
+    }
+}
+
 
 //struct DetailView_Previews: PreviewProvider {
 //    static var previews: some View {

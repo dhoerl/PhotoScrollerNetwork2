@@ -18,7 +18,7 @@ struct ContentView: View {
 //                .navigationBarTitle(
 //                    Text("Image Management").font(.largeTitle)
 //                )
-            DetailView(kvp: ("", ""))
+            DetailView(kvp: (key: "", url: URL(fileURLWithPath: "")))
         }
         .modifier( WTF() )
     }

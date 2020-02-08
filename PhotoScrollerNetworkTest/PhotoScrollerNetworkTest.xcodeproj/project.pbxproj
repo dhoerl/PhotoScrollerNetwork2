@@ -592,7 +592,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoScrollerNetworkTest/Preview Content\"";
 				DEVELOPMENT_TEAM = 748Z47NBAH;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PhotoScrollerNetworkTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -614,7 +614,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoScrollerNetworkTest/Preview Content\"";
 				DEVELOPMENT_TEAM = 748Z47NBAH;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = PhotoScrollerNetworkTest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
