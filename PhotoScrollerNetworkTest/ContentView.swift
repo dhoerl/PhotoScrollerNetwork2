@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    let defaultName = "Coffee"
     @State private var dates = [Date]()
 
     var body: some View {
@@ -18,7 +19,7 @@ struct ContentView: View {
 //                .navigationBarTitle(
 //                    Text("Image Management").font(.largeTitle)
 //                )
-            DetailView(kvp: (key: "", url: URL(fileURLWithPath: "")))
+            DetailView(kvp: (key: defaultName, url: ImageProvider.fileURL(name: defaultName)))
         }
         .modifier( WTF() )
     }
