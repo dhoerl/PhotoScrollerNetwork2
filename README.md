@@ -1,11 +1,15 @@
 # PhotoScrollerNetwork2
 Demo app that uses the new PhotoScrollerSwiftPackage, updated PhotoScrollerNetwork code
 
-1) Add the Package using Xcode->File->Packages with the URL of https://github.com/dhoerl/PhotoScrollerSwiftPackage
+The revised PhotoScrollerNetwork code now offers a NSOuputStream interface, that makes it easy to drive
+with a file based NSInputStream or a network-based one (both provided in this project).
 
-2) Open the Build Phases, and in the Package shown in the left file pane, drag the Libraries/libturbojpeg.a file into the link
-   section. It will appear just above the PhotoScrollerSwiftPackage that should already be there
+This app uses SwiftUI and Combine too. Look at the unit tests for how to use traditional input streams to drive the image creation process.
 
-3) In Build settings, under library search paths, add:
-   "$(BUILD_DIR)/../../SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries"
+Requires the use of the PhotoScrollPackage.
 
+Updates:
+
+Feb 11, 2020: this is now functional for both file based and web based assets. Notice that even for the largest file, Space6, the decoding difference between a 
+  local file and a network asset are barely perceptable - this due to the parallel image decoding.
+  

@@ -22,6 +22,10 @@ struct ImageResult {
         return ImageResult(name: old.name, url: old.url, result: newResult)
     }
 
+    static func new(kvp: (key: String, url: URL)) -> ImageResult {
+        return ImageResult(name: kvp.key, url: kvp.url, result: .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Nothing Happened Yet"])))
+    }
+
     func isSuccess() -> Bool {
         if case .success = result {
             return true
@@ -51,27 +55,42 @@ final class ImageProvider: ObservableObject {
     }
 
     @Published var imageResult: ImageResult
-    var subscriber: AnyCancellable?
+    private var subscriber: AnyCancellable?
 
     private let kvp: (key: String, url: URL)
-    private let imageBuilder: TiledImageBuilder
+    private var imageBuilder: TiledImageBuilder
+    private var isFetching = false
 
 
     init(kvp: (key: String, url: URL)) {
         self.kvp = kvp
 
         // For internet up and down, must do this first (more times is fine)
-        AssetFetcher.startMonitoring(onQueue: nil)
+        // AssetFetcher.startMonitoring(onQueue: nil)   // put in App Delegate
 
         imageBuilder = TiledImageBuilder(size: CGSize(width: 320, height: 320), orientation: 0 /*, queue: AssetFetcher.assetQueue, delegate: nil */)
-        imageResult = ImageResult(name: kvp.key, url: kvp.url, result: .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Nothing Happened Yet"])))
+        imageResult = ImageResult.new(kvp: kvp)
     }
     deinit {
+print("DEINIT:", kvp.key)
         subscriber?.cancel()
     }
 
+    func clear() {
+print("CLEAR:", kvp.key)
+        subscriber?.cancel()
+        imageBuilder = TiledImageBuilder(size: CGSize(width: 320, height: 320), orientation: 0 /*, queue: AssetFetcher.assetQueue, delegate: nil */)
+        imageResult = ImageResult.new(kvp: kvp)
+        isFetching = false
+    }
+
     func fetch() {
-        guard !kvp.key.isEmpty, !imageBuilder.failed, !imageBuilder.finished else { return }
+        guard !isFetching, !kvp.key.isEmpty else { //  !imageBuilder.failed, !imageBuilder.finished
+        return print("DID NOT FETCH:", kvp.key)
+        }
+
+//print("FETCHING \(kvp.key)...")
+        isFetching = true
 //guard kvp.key.isEmpty else { return }
 
 //        subscriber = future
@@ -114,9 +133,10 @@ final class ImageProvider: ObservableObject {
                 receiveValue: { (d) in
                     d.withUnsafeBytes { (bufPtr: UnsafeRawBufferPointer) in
                         if let addr = bufPtr.baseAddress, bufPtr.count > 0 {
-//print("WRITE BYTES:", bufPtr.count)
+//print("WRITE BYTES:", bufPtr.count, "...")
                             let ptr: UnsafePointer<UInt8> = addr.assumingMemoryBound(to: UInt8.self)
                             self.imageBuilder.write(ptr, maxLength: bufPtr.count)
+//print("...WRITE BYTES:", bufPtr.count)
                         }
                     }
                 }

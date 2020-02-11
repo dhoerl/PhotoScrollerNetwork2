@@ -21,7 +21,7 @@ struct DetailView: View {
     init(kvp: (key: String, url: URL)) {
         self.kvp = kvp
 
-print("CALLED FOR IMAGE:", kvp.key, "URL", kvp.url.path)
+        // print("CALLED FOR IMAGE:", kvp.key, "URL", kvp.url.path)
         imageProvider = ImageProvider(kvp: kvp)
     }
 
@@ -51,9 +51,9 @@ print("CALLED FOR IMAGE:", kvp.key, "URL", kvp.url.path)
 
                 Text("Detail view content goes here")
             }
-            ImageView(imageResult: self.$imageProvider.imageResult)
+            ImageView(imageProvider: self.imageProvider)
                 .padding()
-                .onAppear { self.imageProvider.fetch() }
+                .onAppear { print("onAppear:", self.kvp.key); self.imageProvider.fetch() }
         }
 //}
             .navigationBarTitle(Text("Detail"), displayMode: .inline)
@@ -72,16 +72,15 @@ print("CALLED FOR IMAGE:", kvp.key, "URL", kvp.url.path)
 }
 
 struct ImageView: View {
-    @Binding var imageResult: ImageResult
+    @ObservedObject var imageProvider: ImageProvider
     @State private var isAnimating = true
 
     var body: some View {
         Group {
-            if imageResult.isSuccess() {
-                GeometryReader { proxy in
-                    TiledImageView(view: self.imageResult.tilingView(), size: proxy.size)
+            if imageProvider.imageResult.isSuccess() {
+                    TiledImageView(view: self.imageProvider.imageResult.tilingView())
+                        .onDisappear() { print("onDisappear", self.imageProvider.imageResult.name); self.imageProvider.clear() }
                         //.frame(width: 320, height: 320, alignment: .center)
-                }
             } else {
                 ActivityIndicator(isAnimating: $isAnimating, style: .large)
                 //Text("\(imageResult.name) failed \(imageResult.errorMsg())")
@@ -105,14 +104,9 @@ struct ActivityIndicator: UIViewRepresentable {
 
 struct TiledImageView: UIViewRepresentable {
     let view: TilingView
-    let size: CGSize
-
-//    init(imageBuilder: TiledImageBuilder) {
-//        self.imageBuilder = imageBuilder
-//    }
 
     func makeUIView(context: Context) -> ImageScrollView {
-        //let retView = ImageScrollView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
+        ImageScrollView.annotateTiles = true
         let retView = ImageScrollView()
         retView.display(view)
         return retView

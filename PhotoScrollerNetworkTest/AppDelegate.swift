@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //fileTest()
         //combineFileTest()
 
-        //AssetFetcher.startMonitoring(onQueue: assetQueue)
+        AssetFetcher.startMonitoring(onQueue: nil)
         //webTest()
         //combineWebTest()
 #endif

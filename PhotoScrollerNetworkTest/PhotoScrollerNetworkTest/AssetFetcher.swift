@@ -12,11 +12,9 @@ import Combine
 // TODO: progress object (instead of data, struct with max, current progress etc)
 // TODO: could offer an option to cache the file, and on subsequent fetches use the cache - NSCache etc
 
-
 // https://www.avanderlee.com/swift/custom-combine-publisher/ TOO COMPLICATED
 // https://ruiper.es/2019/08/05/custom-publishers-part1/ Two parts!
 // https://www.cocoawithlove.com/blog/twenty-two-short-tests-of-combine-part-1.html
-
 
 private func LOG(_ items: Any..., separator: String = " ", terminator: String = "\n") {
 #if DEBUG
@@ -85,11 +83,17 @@ private extension AssetFetcher {
             self.url = url
             self.downstream = downstream
 
-            fetcher.open()
+            AssetFetcher.assetQueue.async {
+                self.fetcher.open()
+            }
             LOG("INIT")
         }
         deinit {
-            fetcher.close()
+            LOG("DEINIT")
+            let f = fetcher
+            AssetFetcher.assetQueue.async {
+                f.close()
+            }
 #if UNIT_TESTING
             NotificationCenter.default.post(name: FetcherDeinit, object: nil, userInfo: [AssetURL: url])
 #endif
@@ -116,8 +120,11 @@ private extension AssetFetcher {
 
         func cancel() {
             LOG("CANCELLED")
+
             downstream = nil
-            fetcher.close()
+            AssetFetcher.assetQueue.async {
+                self.fetcher.close()
+            }
         }
 
         private func howMuchToRead(request: Int) -> Int {
@@ -133,6 +140,7 @@ private extension AssetFetcher {
         // MARK: StreamDelegate
 
         func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
+LOG("Stream...")
             guard let downstream = downstream else { return }
             guard let stream = aStream as? InputStream else { fatalError() }
             dispatchPrecondition(condition: .onQueue(AssetFetcher.assetQueue))
@@ -165,10 +173,14 @@ private extension AssetFetcher {
                 if askLen > 0 {
                     // We have outstanding requests
                     let bytes = UnsafeMutablePointer<UInt8>.allocate(capacity: askLen)  // mutable Data won't let us get a pointer anymore...
+LOG("read...")
                     let readLen = stream.read(bytes, maxLength: askLen)
+LOG("...read")
                     let data = Data(bytesNoCopy: bytes, count: readLen, deallocator: .custom({ (_, _) in bytes.deallocate() })) // (UnsafeMutableRawPointer, Int)
 
+LOG("downstream.receive(data)...")
                     let _ = downstream.receive(data)
+LOG("...downstream.receive(data)")
 //if let val = fuck.max {
 //    LOG("FUCK2 VAL:", val)
 //} else { LOG("FUCK2 IS INFINITE!") }

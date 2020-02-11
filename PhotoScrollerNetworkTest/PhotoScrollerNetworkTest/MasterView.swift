@@ -32,7 +32,7 @@ typealias ResourcePair = (key: String, url: String)
 private let localFiles: KeyValuePairs<String, String> = [
     "Coffee": "Coffee",
     "Lake": "Lake",
-    "large_leaves_70mp": "large_leaves_70mp",
+    "Leaves": "Leaves",
     "Shed": "Shed",
     "Tree": "Tree",
     "Space4": "Space4",
@@ -41,9 +41,14 @@ private let localFiles: KeyValuePairs<String, String> = [
 ]
 
 private let remoteFiles: KeyValuePairs<String, String> = [
-    "File A": "xxx",
-    "File B": "xxx",
-    "File C": "xxx",
+    "Coffee": "https://www.dropbox.com/s/7ektz3t4i6yefod/Coffee.jpg?dl=1",
+    "Lake": "https://www.dropbox.com/s/b337y2sn1597sry/Lake.jpg?dl=1",
+    "Leaves": "https://www.dropbox.com/s/xv4ftt95ud937w4/large_leaves_70mp.jpg?dl=1",
+    "Shed": "https://www.dropbox.com/s/wq5ed0z4cwgu8xc/Shed.jpg?dl=1",
+    "Tree": "https://www.dropbox.com/s/r1vf3irfero2f04/Tree.jpg?dl=1",
+    "Space4": "https://www.dropbox.com/s/sbda3z1r0komm7g/Space4.jpg?dl=1",
+    "Space5": "https://www.dropbox.com/s/w0s5905cqkcy4ua/Space5.jpg?dl=1",
+    "Space6": "https://www.dropbox.com/s/yx63i2yf8eobrgt/Space6.jpg?dl=1",
 ]
 
 struct MasterView: View {
@@ -93,15 +98,15 @@ struct MasterViewInternal: View {
                     }
                 }
             }
-//            Section(header: Text("Internet Based").font(.largeTitle)) { // font works!!!
-//                ForEach(remoteFiles, id: \.key) { pair in
-//                    NavigationLink(
-//                        destination: DetailView(kvp: pair)
-//                    ) {
-//                        Text("\(pair.key)")
-//                    }
-//                }
-//            }
+            Section(header: Text("Internet Based").font(.largeTitle)) { // font works!!!
+                ForEach(remoteFiles, id: \.key) { pair in
+                    NavigationLink(
+                        destination: DetailView(kvp: (pair.key, URL(string: pair.value)!))
+                    ) {
+                        Text("\(pair.key)")
+                    }
+                }
+            }
         }.listStyle(GroupedListStyle())
 
 
