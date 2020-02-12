@@ -14,27 +14,15 @@ import PhotoScrollerSwiftPackage
 struct DetailView: View {
     @EnvironmentObject var appEnvironment: AppEnvironment
     @ObservedObject var imageProvider: ImageProvider
+    @State private var showingDetail = false
 
     let kvp: (key: String, url: URL)
     var subscriber: AnyCancellable?
 
     init(kvp: (key: String, url: URL)) {
         self.kvp = kvp
-
-        // print("CALLED FOR IMAGE:", kvp.key, "URL", kvp.url.path)
         imageProvider = ImageProvider(kvp: kvp)
     }
-
-//    @Binding var dates: [Date]
-
-//    init(_ dates: Binding<[Date]>) {
-//        self.dates = dates
-//
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//            self.dates.insert(Date(), at: 0)
-//            print("FAD")
-//        }
-//    }
 
     var body: some View {
 
@@ -56,19 +44,32 @@ struct DetailView: View {
                 .onAppear { print("onAppear:", self.kvp.key); self.imageProvider.fetch() }
         }
 //}
-            .navigationBarTitle(Text("Detail"), displayMode: .inline)
+            .navigationBarTitle(Text(kvp.key), displayMode: .inline)
             .navigationBarItems(
                 //leading: Text("Howdie"),
                 trailing: Button(
                     action: {
+                        self.showingDetail.toggle()
                         //withAnimation { self.dates.insert(Date(), at: 0) }
                     }
                 ) {
                     Image(systemName: "plus")
                 }
+                .sheet(isPresented: $showingDetail) {
+                    SnapShotView(image: self.imageProvider.currentImage)
+                }
             )
     }
 
+}
+
+struct SnapShotView: View {
+    let image: UIImage
+
+    var body: some View {
+        Image(uiImage: image)
+            .aspectRatio(contentMode: .fit)
+    }
 }
 
 struct ImageView: View {
@@ -78,7 +79,7 @@ struct ImageView: View {
     var body: some View {
         Group {
             if imageProvider.imageResult.isSuccess() {
-                    TiledImageView(view: self.imageProvider.imageResult.tilingView())
+                    TiledImageView(imageProvider: self.imageProvider)
                         .onDisappear() { print("onDisappear", self.imageProvider.imageResult.name); self.imageProvider.clear() }
                         //.frame(width: 320, height: 320, alignment: .center)
             } else {
@@ -103,12 +104,13 @@ struct ActivityIndicator: UIViewRepresentable {
 }
 
 struct TiledImageView: UIViewRepresentable {
-    let view: TilingView
+    @ObservedObject var imageProvider: ImageProvider
 
     func makeUIView(context: Context) -> ImageScrollView {
-        ImageScrollView.annotateTiles = true
+ImageScrollView.annotateTiles = true
         let retView = ImageScrollView()
-        retView.display(view)
+        retView.display(self.imageProvider.imageResult.tilingView())
+        imageProvider.scrollView = retView
         return retView
     }
 /* From SwiftUI group
