@@ -1,0 +1,12 @@
+Idea to import image from Photos
+
+ALAssetRepresentation *rep = [asset defaultRepresentation];
+CGDataProviderDirectCallbacks callbacks = {
+    .version = 0,
+    .getBytePointer = NULL,
+    .releaseBytePointer = NULL,
+    .getBytesAtPosition = getAssetBytesCallback,
+    .releaseInfo = releaseAssetCallback,
+};
+CGDataProviderRef provider = CGDataProviderCreateDirect((void *)CFBridgingRetain(rep), [rep size], &callbacks);
+CGImageSourceRef source = CGImageSourceCreateWithDataProvider(provider, NULL);

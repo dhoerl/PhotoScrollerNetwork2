@@ -11,7 +11,7 @@ import SwiftUI
 import Combine
 import PhotoScrollerSwiftPackage
 
-// ObservableObjectPublisher
+typealias KVP = (key: String, url: URL)
 
 struct ImageResult {
     let name: String
@@ -22,7 +22,7 @@ struct ImageResult {
         return ImageResult(name: old.name, url: old.url, result: newResult)
     }
 
-    static func new(kvp: (key: String, url: URL)) -> ImageResult {
+    static func new(kvp: KVP) -> ImageResult {
         return ImageResult(name: kvp.key, url: kvp.url, result: .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Nothing Happened Yet"])))
     }
 
@@ -54,21 +54,30 @@ final class ImageProvider: ObservableObject {
         return url
     }
 
+    private static let defaultImageBuilder = TiledImageBuilder(size: CGSize(width: 320, height: 320), orientation: 0)
+    private static let defaultName = "Coffee"
+    static let defaultKVP: KVP = (key: "", url: ImageProvider.fileURL(name: defaultName))
+    fileprivate static let selectionPublisher = PassthroughSubject<KVP, Never>()
+
     @Published var imageResult: ImageResult
+
+    var scrollView: ImageScrollView?                                // Set elsewhere
+    var currentImage: UIImage { scrollView?.image() ?? UIImage() }  // Image retrieved later after scrollview is set
+
     private var subscriber: AnyCancellable?
 
-    private let kvp: (key: String, url: URL)
+    private let kvp: KVP
     private var imageBuilder: TiledImageBuilder
     private var isFetching = false
 
+    private var kvpSubscriber: AnyCancellable?
 
-    init(kvp: (key: String, url: URL)) {
+    init(kvp: KVP) {
         self.kvp = kvp
 
         // For internet up and down, must do this first (more times is fine)
         // AssetFetcher.startMonitoring(onQueue: nil)   // put in App Delegate
-
-        imageBuilder = TiledImageBuilder(size: CGSize(width: 320, height: 320), orientation: 0 /*, queue: AssetFetcher.assetQueue, delegate: nil */)
+        imageBuilder = Self.defaultImageBuilder
         imageResult = ImageResult.new(kvp: kvp)
     }
     deinit {
@@ -79,35 +88,25 @@ print("DEINIT:", kvp.key)
     func clear() {
 print("CLEAR:", kvp.key)
         subscriber?.cancel()
-        imageBuilder = TiledImageBuilder(size: CGSize(width: 320, height: 320), orientation: 0 /*, queue: AssetFetcher.assetQueue, delegate: nil */)
+        imageBuilder = Self.defaultImageBuilder
         imageResult = ImageResult.new(kvp: kvp)
         isFetching = false
+        kvpSubscriber = nil
     }
 
     func fetch() {
-        guard !isFetching, !kvp.key.isEmpty else { //  !imageBuilder.failed, !imageBuilder.finished
-        return print("DID NOT FETCH:", kvp.key)
-        }
+        guard !isFetching, !kvp.key.isEmpty else { return print("DID NOT FETCH:", kvp.key) }
 
 //print("FETCHING \(kvp.key)...")
         isFetching = true
-//guard kvp.key.isEmpty else { return }
 
-//        subscriber = future
-//        .receive(on: DispatchQueue.main)
-//        .eraseToAnyPublisher()
-//        .sink(receiveCompletion: { (completion) in
-//            switch completion {
-//            case .finished:
-//                print("FINISHED!!!")
-//                //print("SUCCESS:", data.count, UIImage(data: data) ?? "WTF")
-//            case .failure(let error):
-//                print("ERROR:", error)
-//            }
-//            },
-//            receiveValue: { (ib) in
-//                self.imageBuilder = ib
-//            }
+        Self.selectionPublisher.send(self.kvp)
+        kvpSubscriber = Self.selectionPublisher
+        .sink(receiveValue: { (kvp) in
+            if self.isFetching, self.kvp != kvp {
+                self.clear()
+            }
+        })
 
         imageBuilder.open()
 
@@ -141,15 +140,6 @@ print("CLEAR:", kvp.key)
                     }
                 }
             )
-/*
-        data.withUnsafeMutableBytes({ (bufPtr: UnsafeMutableRawBufferPointer) -> Void in
-            if let addr = bufPtr.baseAddress {
-                let ptr: UnsafeMutablePointer<UInt8> = addr.assumingMemoryBound(to: UInt8.self)
-                buffer[0] = ptr
-            }
-        })
-*/
-
     }
 
 }

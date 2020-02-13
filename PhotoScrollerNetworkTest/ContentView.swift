@@ -9,17 +9,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    let defaultName = "Coffee"
-    @State private var dates = [Date]()
 
     var body: some View {
         NavigationView {
             //MV(dates: $dates)
-            MasterView(dates: $dates)
+            MasterView()
 //                .navigationBarTitle(
 //                    Text("Image Management").font(.largeTitle)
 //                )
-            DetailView(kvp: (key: "", url: ImageProvider.fileURL(name: defaultName)))
+            DetailView(kvp: ImageProvider.defaultKVP)
         }
         .modifier( WTF() )
     }
@@ -33,26 +31,24 @@ struct ContentView: View {
 //        }
 //    }
 
-struct MV: View {
-    @Binding var dates: [Date]
-
-    var body: some View {
-        MasterView(dates: $dates)
-        .navigationBarTitle(
-            Text("Image Management").font(.largeTitle)
-        )
-        .navigationBarItems(
-            leading: EditButton(),
-            trailing: Button(
-                action: {
-                    withAnimation { self.dates.insert(Date(), at: 0) }
-                }
-            ) {
-                Image(systemName: "plus")
-            }
-        )
-    }
-}
+//struct MV: View {
+//    var body: some View {
+//        MasterView()
+//        .navigationBarTitle(
+//            Text("Image Management").font(.largeTitle)
+//        )
+//        .navigationBarItems(
+//            leading: EditButton(),
+//            trailing: Button(
+//                action: {
+//                    withAnimation { self.dates.insert(Date(), at: 0) }
+//                }
+//            ) {
+//                Image(systemName: "plus")
+//            }
+//        )
+//    }
+//}
 
     struct WTF: ViewModifier {
         @EnvironmentObject var appEnvironment: AppEnvironment

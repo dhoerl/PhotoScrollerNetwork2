@@ -52,10 +52,9 @@ private let remoteFiles: KeyValuePairs<String, String> = [
 ]
 
 struct MasterView: View {
-    @Binding var dates: [Date]
 
     var body: some View {
-        MasterViewInternal(dates: $dates)
+        MasterViewInternal()
             .navigationBarTitle(
                 Text("Images")
             )
@@ -84,8 +83,6 @@ struct MasterView: View {
  */
 
 struct MasterViewInternal: View {
-    @Binding var dates: [Date]
-
 
     var body: some View {
         List {
@@ -119,13 +116,23 @@ struct MasterViewInternal: View {
 }
 
 
-
+#if DEBUG
 struct MasterView_Previews: PreviewProvider {
-    @State static private var dates: [Date] = [Date]()
 
     static var previews: some View {
         NavigationView {
-            MasterView(dates: $dates)
+            MasterView()
         }
     }
 }
+#endif
+
+/*
+List {
+    Section(header: Text("File Based").font(.largeTitle)) { // font works!!!
+        ForEach(localFiles, id: \.key) { pair in NavigationLink(destination: ... ) { Text("\(pair.key)")}}
+    }
+    Section(header: Text("Internet Based").font(.largeTitle))...
+}.listStyle(GroupedListStyle())
+
+*/

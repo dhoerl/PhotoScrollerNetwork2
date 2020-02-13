@@ -90,6 +90,7 @@
 		DEC753D423F34693002EE014 /* Leaves.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Leaves.jpg; path = Images/Leaves.jpg; sourceTree = SOURCE_ROOT; };
 		DEE04E5223E9D1B700BF53B7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 		DEE8397E23E8C68600ECB68E /* libturbojpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libturbojpeg.a; path = "../../../Users/dhoerl/Library/Developer/Xcode/DerivedData/PhotoScrollerNetworkTest-ffdclravncxkjtewqclkyteuxzok/SourcePackages/checkouts/PhotoScrollerSwiftPackage/Libraries/libturbojpeg.a"; sourceTree = "<group>"; };
+		DEF78BFA23F441DA003E3E3A /* Notes */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +155,7 @@
 		DEC3162623D7A562008E17E7 = {
 			isa = PBXGroup;
 			children = (
+				DEF78BFA23F441DA003E3E3A /* Notes */,
 				DE00E33923E9EC58004AD8F0 /* PhotoScrollerSwiftPackage */,
 				DEC3163123D7A562008E17E7 /* PhotoScrollerNetworkTest */,
 				DEADC67123E47C2700BC8F70 /* PhotoScrollerNetworkTestTests */,
