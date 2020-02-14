@@ -19,7 +19,7 @@ private let domain = "com.WebFetcherStream"
 // Code: https://gist.github.com/khanlou/b5e07f963bedcb6e0fcc5387b46991c3
 
 @objcMembers
-final class WebFetcherStream: InputStream {
+final class WebFetcherStream: AssetInputStream {
 
     // Customization Points
     static var maxOperations = 4
@@ -73,6 +73,8 @@ final class WebFetcherStream: InputStream {
     @AtomicWrapper private var _streamError: Error?
     @AtomicWrapper private var _hasBytesAvailable = false
 
+    private(set) var size: Int64 = -1
+
     init(url: URL, delegate: StreamDelegate) {
         assert(!url.isFileURL)
         assert(Self.queue != DispatchQueue.main)
@@ -104,10 +106,11 @@ final class WebFetcherStream: InputStream {
 
 extension WebFetcherStream {
 
-    static func startTask(_ dataTask: URLSessionDataTask) {
+    static func startTask(_ dataTask: URLSessionDataTask, size: Int64) {
         guard let fetcher = Self.tasks[dataTask.taskIdentifier], let delegate = fetcher.delegate, let stream = delegate.stream  else { return }
 
         fetcher._streamStatus = .open
+        fetcher.size = size
         stream(fetcher, .openCompleted)
     }
 
@@ -272,8 +275,17 @@ private class SessionDelegate: NSObject, URLSessionDataDelegate {
         guard let response = response as? HTTPURLResponse else { fatalError() }
 
         if response.statusCode == 200 {
+            var size: Int64 = -1
+            if response.expectedContentLength > 0 {
+                size = response.expectedContentLength
+print("SIZE IN URL RESP:", size)
+            } else
+            if let headerSizeStr = response.value(forHTTPHeaderField: "Content-Length"), let headerSize = Int64(headerSizeStr), headerSize > 0 {
+                size = headerSize
+print(#"SIZE IN "Content-Length":"#, size)
+            }
             completionHandler(.allow)
-            WebFetcherStream.startTask(dataTask)
+            WebFetcherStream.startTask(dataTask, size: size)
         } else {
             completionHandler(.cancel)
             WebFetcherStream.cancelTask(dataTask, statusCode: response.statusCode)

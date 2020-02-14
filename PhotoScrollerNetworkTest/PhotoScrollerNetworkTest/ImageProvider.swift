@@ -16,14 +16,26 @@ typealias KVP = (key: String, url: URL)
 struct ImageResult {
     let name: String
     let url: URL
-    var result: Result<TilingView, Error>
+    var assetSize: Int64 = 0        // actual known size, or -1 for unknown
+    var assetSizeProgress: Int64 = 0   // if size != -1
+    var ucbUsage: Int64 = 0   // bytes of outstanding file system writes
 
-    static func newResultFrom(_ old: ImageResult, newResult: Result<TilingView, Error>) -> ImageResult {
-        return ImageResult(name: old.name, url: old.url, result: newResult)
-    }
+    var result: Result<TilingView, Error>?
 
+//    static func newResultFrom(_ old: ImageResult, newResult: Result<TilingView, Error>) -> ImageResult {
+//        var new = old
+//        new.result = newResult
+//        return new
+//        //return ImageResult(name: old.name, url: old.url, progress: old.progress, ucbUsage: old.ucbUsage, result: newResult)
+//    }
+
+//    func changeValues(assetSize: Int64? = nil, assetSizeProgress: Int64? = nil, ucbUsage: Int64? = nil, result: Result<TilingView, Error>?) -> ImageResult {
+//        return ImageResult(assetSize: assetSize ?? self.assetSize, assetSizeProgress: assetSizeProgress ?? self.assetSizeProgress, ucbUsage: ucbUsage ?? self.ucbUsage,
+//                result: result ?? self.result)
+//    }
     static func new(kvp: KVP) -> ImageResult {
-        return ImageResult(name: kvp.key, url: kvp.url, result: .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Nothing Happened Yet"])))
+        //let result: Result<TilingView, Error> = .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Nothing Happened Yet"]))
+        return ImageResult(name: kvp.key, url: kvp.url)
     }
 
     func isSuccess() -> Bool {
@@ -59,7 +71,7 @@ final class ImageProvider: ObservableObject {
     static let defaultKVP: KVP = (key: "", url: ImageProvider.fileURL(name: defaultName))
     fileprivate static let selectionPublisher = PassthroughSubject<KVP, Never>()
 
-    @Published var imageResult: ImageResult
+    @Published var imageResult: ImageResult // monitored by the SwiftUI views
 
     var scrollView: ImageScrollView?                                // Set elsewhere
     var currentImage: UIImage { scrollView?.image() ?? UIImage() }  // Image retrieved later after scrollview is set
@@ -114,6 +126,7 @@ print("CLEAR:", kvp.key)
             //.eraseToAnyPublisher()
             .sink(receiveCompletion: { (completion) in
                     DispatchQueue.main.async {
+                        var imageResult = self.imageResult
                         let result: Result<TilingView, Error>
                         switch completion {
                         case .finished:
@@ -126,20 +139,31 @@ print("CLEAR:", kvp.key)
                             result = .failure(error)
                         }
                         self.imageBuilder.close()
-                        self.imageResult = ImageResult.newResultFrom(self.imageResult, newResult: result)
+
+                        imageResult.result = result
+                        self.imageResult = imageResult
                     }
                 },
-                receiveValue: { (d) in
-                    d.withUnsafeBytes { (bufPtr: UnsafeRawBufferPointer) in
+                receiveValue: { (assetData) in
+                    var imageResult = self.imageResult
+                    imageResult.ucbUsage = TiledImageBuilder.ubcUsage
+
+                    assetData.data.withUnsafeBytes { (bufPtr: UnsafeRawBufferPointer) in
                         if let addr = bufPtr.baseAddress, bufPtr.count > 0 {
 //print("WRITE BYTES:", bufPtr.count, "...")
                             let ptr: UnsafePointer<UInt8> = addr.assumingMemoryBound(to: UInt8.self)
                             self.imageBuilder.write(ptr, maxLength: bufPtr.count)
 //print("...WRITE BYTES:", bufPtr.count)
+                            imageResult.assetSize = assetData.size
+                            imageResult.assetSizeProgress += Int64(bufPtr.count)
                         }
+                    }
+                    DispatchQueue.main.async {
+                        self.imageResult = imageResult
                     }
                 }
             )
     }
 
 }
+

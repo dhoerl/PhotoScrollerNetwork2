@@ -22,12 +22,21 @@ private func LOG(_ items: Any..., separator: String = " ", terminator: String = 
 #endif
 }
 
+protocol AssetSize {
+    var size: Int64 { get }
+}
+typealias AssetInputStream = InputStream & AssetSize
+
+struct AssetData {
+    let data: Data
+    let size: Int64 // -1 means don't know
+}
 
 final class AssetFetcher: Publisher {
     static var assetQueue = DispatchQueue.main
     static private var _assetQueue: DispatchQueue { DispatchQueue(label: "com.AssetFetcher", qos: .userInitiated) }
 
-    typealias Output = Data
+    typealias Output = AssetData
     typealias Failure = Error
 
     let url: URL
@@ -61,7 +70,7 @@ private protocol StreamReceive: class {
 
 private extension AssetFetcher {
 
-    final class AssetFetcherSubscription<DownStream>: StreamReceive, Subscription where DownStream: Subscriber, DownStream.Input == Data, DownStream.Failure == Error {
+    final class AssetFetcherSubscription<DownStream>: StreamReceive, Subscription where DownStream: Subscriber, DownStream.Input == AssetData, DownStream.Failure == Error {
 
         private let standardLen = 4_096
 
@@ -74,7 +83,7 @@ private extension AssetFetcher {
             let fetcher = WebFetcherStream(url: url, delegate: streamReceiver)
             return fetcher
         }()
-        private lazy var fetcher: InputStream = { url.isFileURL ? _fileFetcher : _webFetcher }()
+        private lazy var fetcher: AssetInputStream = { url.isFileURL ? _fileFetcher as AssetInputStream : _webFetcher as AssetInputStream }()
 
         private var runningDemand: Subscribers.Demand = Subscribers.Demand.max(0)
         private var savedData = Data()
@@ -114,7 +123,8 @@ private extension AssetFetcher {
                 let data = Data(bytesNoCopy: bytes, count: readLen, deallocator: .custom({ (_, _) in bytes.deallocate() })) // (UnsafeMutableRawPointer, Int)
 
                 savedData.removeSubrange(range)
-                let _ = downstream.receive(data)
+                let assetData = AssetData(data: data, size: fetcher.size)
+                let _ = downstream.receive(assetData)
             }
         }
 
@@ -179,16 +189,9 @@ LOG("...read")
                     let data = Data(bytesNoCopy: bytes, count: readLen, deallocator: .custom({ (_, _) in bytes.deallocate() })) // (UnsafeMutableRawPointer, Int)
 
 LOG("downstream.receive(data)...")
-                    let _ = downstream.receive(data)
+                    let assetData = AssetData(data: data, size: fetcher.size)
+                    let _ = downstream.receive(assetData)
 LOG("...downstream.receive(data)")
-//if let val = fuck.max {
-//    LOG("FUCK2 VAL:", val)
-//} else { LOG("FUCK2 IS INFINITE!") }
-//
-//if let val = runningDemand.max {
-//    LOG("runningDemand2 VAL:", val)
-//} else { LOG("runningDemand2 IS INFINITE!") }
-
                     LOG("stream.read=\(readLen) bytes")
                 } else {
                     // No outstanding requests, so buffer the data

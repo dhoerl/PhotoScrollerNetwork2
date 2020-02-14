@@ -118,8 +118,8 @@
 			children = (
 				DEADC62523DCE16100BC8F70 /* AssetFetcher.swift */,
 				DEADC62723DDE66300BC8F70 /* FileFetcherStream.swift */,
-				DEADC63C23DF905300BC8F70 /* WebFetcherStream.swift */,
 				DE790D7523ECB0FB00D20221 /* ImageProvider.swift */,
+				DEADC63C23DF905300BC8F70 /* WebFetcherStream.swift */,
 			);
 			name = Data;
 			sourceTree = "<group>";

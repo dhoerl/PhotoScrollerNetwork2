@@ -10,3 +10,19 @@ CGDataProviderDirectCallbacks callbacks = {
 };
 CGDataProviderRef provider = CGDataProviderCreateDirect((void *)CFBridgingRetain(rep), [rep size], &callbacks);
 CGImageSourceRef source = CGImageSourceCreateWithDataProvider(provider, NULL);
+
+
+// Inspired by https://gist.github.com/nitrag/b3117a4b6b8e89fdbc12b98029cf98f8
++ (UIImage *)imageFromView:(UIView *)view subsection:(CGRect)subRect
+{
+    // Image will be sized to the smaller rectangle
+    UIGraphicsBeginImageContextWithOptions(subRect.size, YES, 0);
+
+    // The primary view needs to shift up and left so the desired rect is visible
+    // But the rect passed below needs to be sized to the view, otherwise the image is compressed
+    CGRect drawRect = CG
+    [self drawViewHierarchyInRect:imageSpecs.drawRect afterScreenUpdates:NO];  // must be same size as the view being drawn. Use NO otherwise iOS complains
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}

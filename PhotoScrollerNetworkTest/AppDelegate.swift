@@ -93,9 +93,9 @@ extension AppDelegate: StreamDelegate {
                                 self.mySubscriber = nil
                             }
                         },
-                        receiveValue: { (data) in
+                        receiveValue: { (assetData) in
                             //print("SINK: got data:", data.count)
-                            self.data.append(data)
+                            self.data.append(assetData.data)
                         })
 //DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 //    self.mySubscriber?.cancel()
@@ -126,9 +126,9 @@ extension AppDelegate: StreamDelegate {
                                 self.mySubscriber = nil
                             }
                         },
-                        receiveValue: { (data) in
+                        receiveValue: { (assetData) in
                             //print("SINK: got data:", data.count)
-                            self.data.append(data)
+                            self.data.append(assetData.data)
                         })
 
 //        mySubscriber = AssetFetcher(url: url)

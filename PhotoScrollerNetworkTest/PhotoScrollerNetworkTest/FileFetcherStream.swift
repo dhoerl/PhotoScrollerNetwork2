@@ -9,13 +9,14 @@
 
 import Foundation
 
-// NOTE: cannot subclass InputStream as we'd loose all the built in
+// NOTE: cannot subclass InputStream as we'd loose all the built in features, so we shadow it
 @objcMembers
-final class FileFetcherStream: InputStream {
+final class FileFetcherStream: AssetInputStream {
 
     let url: URL
     let queue: DispatchQueue
     let inputStream: InputStream
+    let size: Int64
 
     init(url: URL, queue: DispatchQueue, delegate: StreamDelegate) {
         assert(url.isFileURL)
@@ -32,6 +33,13 @@ final class FileFetcherStream: InputStream {
         // https://stackoverflow.com/a/41050351/1633251
         // https://developer.apple.com/library/archive/samplecode/sc1236/Listings/TLSTool_TLSToolCommon_m.html
         CFReadStreamSetDispatchQueue(inputStream, queue)
+
+        do {
+            let dict = try FileManager.default.attributesOfItem(atPath: url.path)
+            size = dict[.size] as? Int64 ?? 0
+        } catch {
+            size = 0
+        }
 
         super.init(data: Data())
     }
