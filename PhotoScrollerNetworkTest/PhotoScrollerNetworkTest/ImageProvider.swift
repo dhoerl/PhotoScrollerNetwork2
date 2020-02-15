@@ -66,7 +66,7 @@ final class ImageProvider: ObservableObject {
         return url
     }
 
-    private static let defaultImageBuilder = TiledImageBuilder(size: CGSize(width: 320, height: 320), orientation: 0)
+    private static var defaultImageBuilder: TiledImageBuilder { return TiledImageBuilder(size: CGSize(width: 320, height: 320), orientation: 0)}
     private static let defaultName = "Coffee"
     static let defaultKVP: KVP = (key: "", url: ImageProvider.fileURL(name: defaultName))
     fileprivate static let selectionPublisher = PassthroughSubject<KVP, Never>()
@@ -90,6 +90,7 @@ final class ImageProvider: ObservableObject {
         // For internet up and down, must do this first (more times is fine)
         // AssetFetcher.startMonitoring(onQueue: nil)   // put in App Delegate
         imageBuilder = Self.defaultImageBuilder
+        imageBuilder.identifier = kvp.key
         imageResult = ImageResult.new(kvp: kvp)
     }
     deinit {
@@ -100,6 +101,7 @@ print("DEINIT:", kvp.key)
     func clear() {
 print("CLEAR:", kvp.key)
         subscriber?.cancel()
+        imageBuilder = Self.defaultImageBuilder
         imageBuilder = Self.defaultImageBuilder
         imageResult = ImageResult.new(kvp: kvp)
         isFetching = false
@@ -125,41 +127,47 @@ print("CLEAR:", kvp.key)
         subscriber = AssetFetcher(url: kvp.url)
             //.eraseToAnyPublisher()
             .sink(receiveCompletion: { (completion) in
-                    DispatchQueue.main.async {
-                        var imageResult = self.imageResult
-                        let result: Result<TilingView, Error>
-                        switch completion {
-                        case .finished:
-                            print("SUCCESS!!!")
-                            result = .success(TilingView(imageBuilder: self.imageBuilder))
-                            break
-                            //print("SUCCESS:", data.count, UIImage(data: data) ?? "WTF")
-                        case .failure(let error):
-                            print("ERROR:", error)
-                            result = .failure(error)
-                        }
-                        self.imageBuilder.close()
+                    let block: (TiledImageBuilder) -> Result<TilingView, Error>
 
-                        imageResult.result = result
-                        self.imageResult = imageResult
+                    switch completion {
+                    case .finished:
+                        assert(self.imageBuilder.finished)
+                        assert(!self.imageBuilder.failed);
+                        block = { (tb: TiledImageBuilder) in
+                            let tv = TilingView(imageBuilder: tb)
+                            print("SUCCESS! IMAGE SIZE:", tv.imageSize())
+                            return .success(tv)
+                        }
+                    case .failure(let error):
+                        block = { _ in
+                            print("ERROR:", error)
+                            return .failure(error)
+                        }
+                    }
+                    self.imageBuilder.close()
+
+                    var retVal = self.imageResult
+                    DispatchQueue.main.async {
+                        retVal.result = block(self.imageBuilder)
+                        self.imageResult = retVal
                     }
                 },
                 receiveValue: { (assetData) in
-                    var imageResult = self.imageResult
-                    imageResult.ucbUsage = TiledImageBuilder.ubcUsage
+                    var retVal = self.imageResult
+//imageResult.ucbUsage = TiledImageBuilder.ubcUsage
 
                     assetData.data.withUnsafeBytes { (bufPtr: UnsafeRawBufferPointer) in
                         if let addr = bufPtr.baseAddress, bufPtr.count > 0 {
-//print("WRITE BYTES:", bufPtr.count, "...")
+//print("IP WRITE BYTES[\(self.kvp.key)]:", bufPtr.count, "...")
                             let ptr: UnsafePointer<UInt8> = addr.assumingMemoryBound(to: UInt8.self)
                             self.imageBuilder.write(ptr, maxLength: bufPtr.count)
 //print("...WRITE BYTES:", bufPtr.count)
-                            imageResult.assetSize = assetData.size
-                            imageResult.assetSizeProgress += Int64(bufPtr.count)
+                            retVal.assetSize = assetData.size
+                            retVal.assetSizeProgress += Int64(bufPtr.count)
                         }
                     }
                     DispatchQueue.main.async {
-                        self.imageResult = imageResult
+                        self.imageResult = retVal
                     }
                 }
             )

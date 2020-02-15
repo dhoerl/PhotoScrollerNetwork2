@@ -203,8 +203,8 @@ if byURL.image == nil { LOG("NO IMAGE FOR:", byURL.name) }
                                         self.expectation.fulfill()
                                     }
                                 },
-                                receiveValue: { (d) in
-                                    data.append(d)
+                                receiveValue: { (assetData) in
+                                    data.append(assetData.data)
                                 })
             subscribers[url] = mySubscriber
 

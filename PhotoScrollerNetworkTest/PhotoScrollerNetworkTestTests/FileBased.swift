@@ -35,7 +35,7 @@ final class ByURL {
 }
 /* --- */
 
-private let allFiles = ["Coffee", "err_image", "Lake", "large_leaves_70mp", "Shed", "Tree", "Space4", "Space5", "Space6"]
+private let allFiles = ["Coffee", "err_image", "Lake", "Leaves", "Shed", "Tree", "Space4", "Space5", "Space6"]
 
 final class FileBased: XCTestCase, StreamDelegate {
 
@@ -89,14 +89,17 @@ final class FileBased: XCTestCase, StreamDelegate {
     func notification(_ note: Notification) {
         if let url = note.userInfo?[FetcherURL] as? URL {
             self.assetQueue.async {
-                guard let byURL = self.fetchers[url] else { return }    // Combine uses a fetcher, its not in this array
-                byURL.dealloced = true
+                // print("DEINIT notification for \(url)")
+                if let byURL = self.fetchers[url] {
+                    byURL.dealloced = true
+                }
                 DispatchQueue.main.async {
                     self.expectation.fulfill()
                 }
             }
         } else
-        if let _ = note.userInfo?[AssetURL] as? URL {
+        if let url = note.userInfo?[AssetURL] as? URL {
+            // print("DEINIT ASSET notification for \(url)")
             DispatchQueue.main.async {
                 self.expectation.fulfill()
             }
@@ -167,7 +170,7 @@ final class FileBased: XCTestCase, StreamDelegate {
 
     private func runTestCombine(files: [String]) {
         var expectedFulfillmentCount = 0
-        expectation.expectedFulfillmentCount = 1
+        //expectation.expectedFulfillmentCount = 0
 
         for file in files {
             let path = Bundle.main.path(forResource: file, ofType: "jpg")!
@@ -183,7 +186,7 @@ final class FileBased: XCTestCase, StreamDelegate {
                                     case .finished:
                                         XCTAssert(!data.isEmpty)
                                         XCTAssertNotNil(UIImage(data: data))
-                                        //print("SUCCESS:", data.count, UIImage(data: data) ?? "WTF")
+                                        print("SUCCESS:", data.count, UIImage(data: data) ?? "WTF")
                                     case .failure(let error):
                                         print("ERROR:", error)
                                     }
@@ -191,8 +194,9 @@ final class FileBased: XCTestCase, StreamDelegate {
                                         self.expectation.fulfill()
                                     }
                                 },
-                                receiveValue: { (d) in
-                                    data.append(d)
+                                receiveValue: { (assetData) in
+//print("HAHAHHA:", assetData.data.count)
+                                    data.append(assetData.data)
                                 })
             subscribers[url] = mySubscriber
         }

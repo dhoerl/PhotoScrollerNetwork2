@@ -121,9 +121,9 @@ private extension AssetFetcher {
                 let range = 0..<readLen
                 savedData.copyBytes(to: bytes, from: range)
                 let data = Data(bytesNoCopy: bytes, count: readLen, deallocator: .custom({ (_, _) in bytes.deallocate() })) // (UnsafeMutableRawPointer, Int)
+                let assetData = AssetData(data: data, size: fetcher.size)
 
                 savedData.removeSubrange(range)
-                let assetData = AssetData(data: data, size: fetcher.size)
                 let _ = downstream.receive(assetData)
             }
         }
